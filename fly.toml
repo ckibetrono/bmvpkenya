@@ -1,43 +1,26 @@
-# fly.toml app configuration file generated for bmvpkenya on 2023-06-08T16:18:58+03:00
+# fly.toml app configuration file generated for bmvpkenya on 2023-06-08T22:33:27+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = "bmvpkenya"
-primary_region = "ams"
+primary_region = "dfw"
 kill_signal = "SIGTERM"
-kill_timeout = "5s"
-
-[experimental]
-  auto_rollback = true
 
 [deploy]
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "bmvp.fly.dev"
+  PHX_HOST = "bmvpkenya.fly.dev"
   PORT = "8080"
 
-[[services]]
-  protocol = "tcp"
+[http_service]
   internal_port = 8080
-  processes = ["app"]
-
-  [[services.ports]]
-    port = 80
-    handlers = ["http"]
-    force_https = true
-
-  [[services.ports]]
-    port = 443
-    handlers = ["tls", "http"]
-  [services.concurrency]
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  [http_service.concurrency]
     type = "connections"
     hard_limit = 1000
     soft_limit = 1000
-
-  [[services.tcp_checks]]
-    interval = "15s"
-    timeout = "2s"
-    grace_period = "1s"
-    restart_limit = 0
