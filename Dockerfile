@@ -88,6 +88,7 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/bmvpkenya ./
 
 USER nobody
 
+chmod +x /app/bin/*
 CMD ["/app/bin/server"]
 
 # Appended by flyctl
