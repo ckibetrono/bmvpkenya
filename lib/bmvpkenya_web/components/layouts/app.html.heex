@@ -26,7 +26,7 @@
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
       <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
-        <%= if @current_user do %>
+        <%= if assigns[:current_user] do %>
           <li class="text-[0.8125rem] leading-6 text-zinc-900">
             <%= @current_user.email %>
           </li>
@@ -108,10 +108,44 @@
             </a>
           </div>
           <div class="py-6">
-            <a href="#"
-              class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">
-              Log in
-            </a>
+            <ul class="relative z-10 flex flex-col items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
+              <%= if assigns[:current_user] do %>
+                <li class="text-[0.8125rem] leading-6 text-zinc-900">
+                  <%= @current_user.email %>
+                </li>
+                <li>
+                  <.link href={~p"/articles"}
+                    class="btn">
+                    My Articles
+                  </.link>
+                </li>
+                <li>
+                  <.link href={~p"/users/settings"}
+                    class="btn">
+                    Settings
+                  </.link>
+                </li>
+                <li>
+                  <.link href={~p"/users/log_out"} method="delete"
+                    class="btn">
+                    Log out
+                  </.link>
+                </li>
+                <% else %>
+                  <li>
+                    <.link href={~p"/users/register"}
+                      class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700">
+                      Register
+                    </.link>
+                  </li>
+                  <li>
+                    <.link href={~p"/users/log_in"}
+                      class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700">
+                      Log in
+                    </.link>
+                  </li>
+                  <% end %>
+            </ul>
           </div>
         </div>
       </div>

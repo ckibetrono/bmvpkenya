@@ -1,6 +1,5 @@
+
 <.header>
-  Article <%= @article.id %>
-  <:subtitle>This is a article record from your database.</:subtitle>
   <:actions>
     <.link patch={~p"/articles/#{@article}/show/edit"} phx-click={JS.push_focus()}>
       <.button>Edit article</.button>
@@ -8,10 +7,14 @@
   </:actions>
 </.header>
 
-<.list>
-  <:item title="Title"><%= @article.title %></:item>
-  <:item title="Content"><%= @article.content %></:item>
-</.list>
+<div class="mx-auto max-w-2xl pt-12">
+  <h2 class="text-center text-3xl font-bold tracking-light sm:text-4xl">
+    <%= @article.title %>
+  </h2>
+
+  <div class="article-content mt-10 font-normal text-md">
+    <div><%= Phoenix.HTML.Format.text_to_html(@article.content) %></div>
+  </div>
 
 <.back navigate={~p"/articles"}>Back to articles</.back>
 
@@ -25,3 +28,4 @@
     patch={~p"/articles/#{@article}"}
   />
 </.modal>
+</div>

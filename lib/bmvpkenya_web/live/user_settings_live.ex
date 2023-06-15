@@ -5,12 +5,28 @@ defmodule BmvpkenyaWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
+    <div class="max-w-2xl mx-auto mt-12">
     <.header class="text-center">
       Account Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
     </.header>
 
+    <h2><%= @current_user.username %></h2>
+
     <div class="space-y-12 divide-y">
+    <div>
+        <.simple_form
+          for={@username_form}
+          id="username_form"
+          phx-submit="update_username"
+          phx-change="validate_username"
+        >
+          <.input field={@username_form[:username]} type="username" label="Username" required />
+          <:actions>
+            <.button phx-disable-with="Changing...">Change Username</.button>
+          </:actions>
+        </.simple_form>
+      </div>
       <div>
         <.simple_form
           for={@email_form}
@@ -70,6 +86,7 @@ defmodule BmvpkenyaWeb.UserSettingsLive do
         </.simple_form>
       </div>
     </div>
+    </div>
     """
   end
 
@@ -90,6 +107,7 @@ defmodule BmvpkenyaWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    username_changeset = Accounts.change_user_username(user)
 
     socket =
       socket
@@ -98,6 +116,7 @@ defmodule BmvpkenyaWeb.UserSettingsLive do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:username_form, to_form(username_changeset))
       |> assign(:trigger_submit, false)
 
     {:ok, socket}
@@ -162,6 +181,40 @@ defmodule BmvpkenyaWeb.UserSettingsLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, password_form: to_form(changeset))}
+    end
+  end
+
+  def handle_event("validate_username", params, socket) do
+    %{"user" => user_params} = params
+
+    username_form =
+      socket.assigns.current_user
+      |> Accounts.change_user_username(user_params)
+      |> Map.put(:action, :validate)
+      |> to_form()
+
+    {:noreply, assign(socket, username_form: username_form)}
+  end
+
+  def handle_event("update_username", params, socket) do
+    %{"user" => user_params} = params
+    user = socket.assigns.current_user
+
+    case Accounts.update_user_username(user, user_params) do
+      {:ok, user} ->
+        username_form =
+          user
+          |> Accounts.change_user_username(user_params)
+          |> to_form()
+
+          socket =
+            socket
+            |> put_flash(:info, "username updated!")
+            |> assign(username_form: username_form, current_user: user)
+        {:noreply, socket}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, username_form: to_form(changeset))}
     end
   end
 end

@@ -26,6 +26,12 @@ defmodule Bmvpkenya.Accounts do
     Repo.get_by(User, email: email)
   end
 
+  def get_user_by_username(username) do
+    User
+    |> Repo.get_by(username: username)
+    |> Repo.normalize_one()
+  end
+
   @doc """
   Gets a user by email and password.
 
@@ -108,6 +114,9 @@ defmodule Bmvpkenya.Accounts do
     User.email_changeset(user, attrs, validate_email: false)
   end
 
+  def change_user_username(user, attrs \\ %{}) do
+    User.username_changeset(user, attrs)
+  end
   @doc """
   Emulates that the email will change without actually changing
   it in the database.
@@ -155,6 +164,12 @@ defmodule Bmvpkenya.Accounts do
     Ecto.Multi.new()
     |> Ecto.Multi.update(:user, changeset)
     |> Ecto.Multi.delete_all(:tokens, UserToken.user_and_contexts_query(user, [context]))
+  end
+
+  def update_user_username(user, attrs) do
+    user
+    |> User.username_changeset(attrs)
+    |> Repo.update
   end
 
   @doc ~S"""

@@ -5,6 +5,7 @@ defmodule Bmvpkenya.Accounts.User do
   @foreign_key_type :binary_id
   schema "users" do
     field :email, :string
+    field :username, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :naive_datetime
@@ -40,6 +41,12 @@ defmodule Bmvpkenya.Accounts.User do
     |> cast(attrs, [:email, :password])
     |> validate_email(opts)
     |> validate_password(opts)
+    |> add_random_username()
+  end
+
+  defp add_random_username(changeset) do
+    username = "#{Faker.Cat.En.name()}#{Faker.Person.En.last_name()}#{Enum.random(1000..9999)}}"
+    put_change(changeset, :username, username)
   end
 
   defp validate_email(changeset, opts) do
@@ -99,6 +106,19 @@ defmodule Bmvpkenya.Accounts.User do
       %{changes: %{email: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :email, "did not change")
     end
+  end
+
+  @doc """
+  A user changeset for changing the username.
+
+  It requires the email to change otherwise an error is added.
+  """
+  def username_changeset(user, attrs, opts \\ []) do
+    user
+    |> cast(attrs, [:username])
+    |> validate_length(:username, min: 5, max: 25)
+    |> unsafe_validate_unique(:username, Bmvpkenya.Repo)
+    |> unique_constraint(:username)
   end
 
   @doc """
