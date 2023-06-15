@@ -111,9 +111,9 @@ defmodule Bmvpkenya.Accounts.User do
   @doc """
   A user changeset for changing the username.
 
-  It requires the email to change otherwise an error is added.
+  It requires the username otherwise an error is added.
   """
-  def username_changeset(user, attrs, opts \\ []) do
+  def username_changeset(user, attrs, _opts \\ []) do
     user
     |> cast(attrs, [:username])
     |> validate_length(:username, min: 5, max: 25)
