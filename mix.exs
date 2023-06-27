@@ -52,7 +52,9 @@ defmodule Bmvpkenya.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
-      {:pbkdf2_elixir, "~> 2.0"}
+      {:pbkdf2_elixir, "~> 2.0"},
+      {:dotenvy, "~> 0.8.0"},
+      {:lemon_ex, "~> 0.1.5"}
     ]
   end
 

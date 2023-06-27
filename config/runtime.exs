@@ -1,5 +1,7 @@
 import Config
+import Dotenvy
 
+source!([".env", System.get_env()])
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
@@ -19,6 +21,10 @@ import Config
 if System.get_env("PHX_SERVER") do
   config :bmvpkenya, BmvpkenyaWeb.Endpoint, server: true
 end
+
+config :lemon_ex,
+  api_key: env!("LEMONSQUEEZY_API_KEY"),
+  webhook_secret: env!("LEMONSQUEEZY_WEBHOOK_SECRET")
 
 if config_env() == :prod do
   database_url =
@@ -64,6 +70,8 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  source!([".env", System.get_env()])
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key
@@ -102,16 +110,17 @@ if config_env() == :prod do
   # Also, you may need to configure the Swoosh API client of your choice if you
   # are not using SMTP. Here is an example of the configuration:
   #
-       config :bmvpkenya, Bmvpkenya.Mailer,
-         adapter: Swoosh.Adapters.Mailgun,
-         api_key: System.get_env("MAILGUN_API_KEY"),
-         domain: System.get_env("MAILGUN_DOMAIN"),
-         base_url: "https://api.eu.mailgun.net/v3"
+  config :bmvpkenya, Bmvpkenya.Mailer,
+    adapter: Swoosh.Adapters.Mailgun,
+    api_key: System.get_env("MAILGUN_API_KEY"),
+    domain: System.get_env("MAILGUN_DOMAIN"),
+    base_url: "https://api.eu.mailgun.net/v3"
+
   #
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney and Finch out of the box:
   #
-       config :swoosh, :api_client, Swoosh.ApiClient.Hackney
+  config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
 end
