@@ -38,6 +38,24 @@ defmodule Bmvpkenya.Accounts.UserNotifier do
   end
 
   @doc """
+  Deliver instructions to confirm account.
+  """
+  def deliver_article_url(user_email, url, article) do
+    deliver(user_email, "Your Article from Kitemoja", """
+
+    ==============================
+
+    Hi #{user_email},
+
+    Here is the link to the article #{article.title} you just purchased:
+
+    #{url}
+
+    ==============================
+    """)
+  end
+
+  @doc """
   Deliver instructions to reset a user password.
   """
   def deliver_reset_password_instructions(user, url) do

@@ -6,4 +6,8 @@ defmodule BmvpkenyaWeb.PageController do
     # so skip the default app layout.
     render(conn, :home)
   end
+
+  def checkout_success(conn, _params) do
+    render(conn, :checkout_success)
+  end
 end

@@ -39,6 +39,14 @@ defmodule BmvpkenyaWeb.Endpoint do
   plug Plug.RequestId
   plug Plug.Telemetry, event_prefix: [:phoenix, :endpoint]
 
+  # In your endpoint.ex
+
+  plug LemonEx.Webhooks.Plug,
+    # <- At which path the Plug expects to receive webhooks
+    at: "/webhooks/lemonsqueezy",
+    # <- Your handler module
+    handler: BmvpkenyaWeb.WebhookHandler
+
   plug Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json],
     pass: ["*/*"],

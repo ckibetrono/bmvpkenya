@@ -22,6 +22,8 @@ defmodule BmvpkenyaWeb.Router do
 
     get "/", PageController, :home
     live "/u/:username", OverviewLive
+    live "/articles/:id", ArticleLive.Show, :show
+    get "/checkout/success", PageController, :checkout_success
   end
 
   # Other scopes may use custom stacks.
@@ -74,7 +76,6 @@ defmodule BmvpkenyaWeb.Router do
       live "/articles/new", ArticleLive.Index, :new
       live "/articles/:id/edit", ArticleLive.Index, :edit
 
-      live "/articles/:id", ArticleLive.Show, :show
       live "/articles/:id/show/edit", ArticleLive.Show, :edit
     end
   end

@@ -21,6 +21,8 @@ config :bmvpkenya, BmvpkenyaWeb.Endpoint,
   pubsub_server: Bmvpkenya.PubSub,
   live_view: [signing_salt: "Rq/dI1zw"]
 
+config :ex_money, default_cldr_backend: Bmvpkenya.Cldr
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

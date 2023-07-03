@@ -54,7 +54,8 @@ defmodule Bmvpkenya.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:pbkdf2_elixir, "~> 2.0"},
       {:dotenvy, "~> 0.8.0"},
-      {:lemon_ex, "~> 0.1.5"}
+      {:lemon_ex, "~> 0.1.5"},
+      {:ex_money_sql, "~> 1.9"}
     ]
   end
 
